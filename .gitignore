@@ -1,0 +1,4 @@
+img/
+MNIST_data/
+*.pyc
+.idea/

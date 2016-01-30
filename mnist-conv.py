@@ -1,5 +1,6 @@
 import input_data
 import tensorflow as tf
+from tqdm import tqdm
 
 
 def weight_variable(shape):
@@ -15,7 +16,7 @@ def conv2D(x, W):
     return tf.nn.conv2d(x, W, strides=[1,1,1,1], padding='SAME')
 
 def max_pool_2x2(x):
-    return tf.nn_max_pool(x, ksize=[1,2,2,1], strides=[1,2,2,1], padding='SAME')
+    return tf.nn.max_pool(x, ksize=[1,2,2,1], strides=[1,2,2,1], padding='SAME')
 
 mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
 
@@ -58,10 +59,14 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
 sess = tf.InteractiveSession()
 sess.run(tf.initialize_all_variables())
-for i in range(20000):
+for i in tqdm(range(20000)):
     batch = mnist.train.next_batch(50)
     if i % 100 == 0:
-        train_accuracy = accuracy.eval
+        train_accuracy = accuracy.eval(feed_dict={
+            x: batch[0], y_:batch[1], keep_prob: 1.0})
+        print "step {}, training accuracy {}".format(i, train_accuracy)
     train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
 
-print accuracy.eval(feed_dict={x: mnist.test.images, y_: mnist.test.labels})
+print "test accuracy {}".format(accuracy.eval(feed_dict={
+    x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0
+}))
