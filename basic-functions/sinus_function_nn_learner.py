@@ -56,11 +56,12 @@ for step in xrange(100000):
         x_test, y_test = get_batch_of_data()
         y_hat = y.eval(feed_dict={x: x_test})
 
-        plt.plot(x_test, y_hat, '.', label="real function")
-        plt.plot(x_test, y_test, '.', label="learned function")
+        plt.plot(x_test, y_hat, '.', label="learned f")
+        plt.plot(x_test, y_test, '.', label="real f")
         plt.legend()
+        plt.ylim([-1.5, 1.5])
         plt.title("after {} iteration".format(step))
-        plt.savefig("img/sinus_st={}_lr={}_K={}.png".format(step, learning_rate, K))
+        plt.savefig("img/sinus_st={:010d}_lr={}_K={}.png".format(step, learning_rate, K))
         plt.close()
 
 """
